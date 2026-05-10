@@ -65,10 +65,10 @@ DOCUMENT CONTEXT:
 ${contextString}
 `;
 
-  const client = new OpenAI({ apiKey: process.env.GROK_API_KEY || process.env.OPENAI_API_KEY, baseURL: process.env.GROK_API_KEY ? "https://api.x.ai/v1" : undefined });
+  const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
   const response = await client.chat.completions.create({
-    model: process.env.GROK_API_KEY ? "grok-beta" : "gpt-4o-mini",
+    model: "gpt-4o-mini",
     max_tokens: 1000,
     temperature: 0.2,
     messages: [
