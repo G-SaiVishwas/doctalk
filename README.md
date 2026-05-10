@@ -66,24 +66,31 @@ The server creates `./uploads/` if missing and tracks active sessions in an **in
 
 ---
 
-## Deployment (Render.com)
+## Deployment
 
-1. Push this repo to **GitHub** (public).
-2. Sign in to [Render.com](https://render.com) with GitHub.
-3. **New +** → **Web Service** → select the **`doctalk`** repository.
-4. Configure:
-   - **Name:** `doctalk`
-   - **Environment:** Node
-   - **Build Command:** `npm install`
-   - **Start Command:** `npm start`
-   - **Instance:** Free (or any tier you prefer)
-5. Under **Environment variables**, add:
-   - `OPENAI_API_KEY` — your secret key  
-   - `QDRANT_URL` — Qdrant Cloud HTTPS URL (**not** `localhost`)  
-   - `QDRANT_API_KEY` — Qdrant Cloud API key  
-   - Optionally `PORT` — Render injects **`PORT`** automatically; you normally **do not** need to set it.
-6. **Create Web Service** and wait until the deploy is **live**.
-7. Copy the Render URL (`https://<service>.onrender.com`), test upload + chat, then update **`LIVE_URL_HERE`** below and push a README commit (`docs: add live demo link`).
+We split the deployment into two distinct pieces so you can maximize the Generous Free Tiers of the two top platforms:
+1. **Backend (Render.com)** — Handles the Node API, doc uploading, and running OpenAI models.
+2. **Frontend (Vercel)** — Hosts the HTML/JS static files.
+
+### 1. Render.com (Backend)
+
+1. Push this repo to your GitHub.
+2. Sign in to [Render.com](https://render.com) and create a **Web Service** pointing to your repository.
+3. Configure it as a **Node** environment, with Build Command `npm install` and Start Command `npm start`.
+4. Add your Environment variables (`OPENAI_API_KEY`, `QDRANT_URL`, `QDRANT_API_KEY`).
+5. Deploy it and copy the live URL (e.g., `https://doctalk.onrender.com`).
+
+### 2. Connect the Vercel Proxy
+Because Render is on a different domain, the frontend needs to know where the backend is. Open the `vercel.json` file in this repository and update the destination URL with the exact Render URL you just acquired. Save and push to GitHub.
+
+### 3. Vercel (Frontend)
+
+1. Sign in to [Vercel.com](https://vercel.com).
+2. **Add New...** -> **Project** and select this repository.
+3. Keep default settings (`Output Directory: public`) and deploy.
+Vercel will act as a proxy.
+
+> **Note:** The Render free tier spins down the backend after 15 minutes of inactivity. When a user first opens your Vercel site after a period of dormancy, the frontend displays a "Wake up call sent to Render backend..." banner while the server restarts (which takes ~50 seconds).
 
 ---
 
