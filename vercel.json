@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://YOUR_KOYEB_BACKEND_URL.koyeb.app/api/:path*"
+      "destination": "https://YOUR_RENDER_BACKEND_URL.onrender.com/api/:path*"
     }
   ]
 }

@@ -563,6 +563,11 @@
     </style>
   </head>
   <body>
+    <!-- SERVER WAKING UP BANNER -->
+    <div id="server-wakeup-banner" style="position: fixed; top: 0; left: 0; right: 0; background: var(--mint-dim); color: var(--deep); padding: 12px; text-align: center; font-weight: 600; font-size: 14px; z-index: 9999; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: opacity 0.5s ease;">
+      Wake up call sent to Render backend... please wait (~50s)
+    </div>
+
     <div class="ambient" aria-hidden="true">
       <div class="orb one"></div>
       <div class="orb two"></div>
@@ -900,6 +905,25 @@
       });
 
       setView("upload");
+
+      // RENDER: Check if backend is asleep
+      let healthTimeout = setTimeout(() => {
+        // If no response after 2 seconds, assume cold start
+        $("#server-wakeup-banner").style.display = "block";
+      }, 2000);
+
+      fetch("/api/health")
+        .then(() => {
+          clearTimeout(healthTimeout);
+          const banner = $("#server-wakeup-banner");
+          if (banner.style.display !== "none") {
+            banner.style.background = "var(--mint)";
+            banner.innerText = "Backend is awake!";
+            setTimeout(() => { banner.style.opacity = "0"; setTimeout(() => banner.style.display = "none", 500); }, 2000);
+          }
+        })
+        .catch(console.error);
+
     </script>
   </body>
 </html>
