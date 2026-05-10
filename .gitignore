@@ -3,3 +3,4 @@ uploads/
 .env
 *.pdf
 *.txt
+DEPLOYMENT_GUIDE.md
